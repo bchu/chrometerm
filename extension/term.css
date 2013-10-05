@@ -1,0 +1,13 @@
+body {
+  background: rgb(10,10,10);
+}
+
+.terminal {
+  color: rgb(245,245,245);
+
+
+  /* OVERRIDES */
+  padding: 0;
+  margin: 0;
+  /* END OVERRIDES */
+}
