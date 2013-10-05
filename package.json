@@ -1,0 +1,15 @@
+{
+  "name": "chrometerm",
+  "version": "0.0.1",
+  "description": "",
+  "main": "chrometerm",
+  "author": "Brian Chu",
+  "license": "MIT",
+  "dependencies": {
+    "socket.io": "~0.9.16"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-nodemon": "~0.1.1"
+  }
+}

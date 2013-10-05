@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+var app = require('http').createServer(handler);
+var io = require('socket.io').listen(app);
+var fs = require('fs');
+
+app.listen(4109);
+
+function handler (req, res) {
+  res.end(404);
+}
+
+io.sockets.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+});
