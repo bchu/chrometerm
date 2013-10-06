@@ -40,6 +40,7 @@ window.addEventListener('DOMContentLoaded', function() {
     else if (data) {
       var li = line(data);
       output.appendChild(li);
+      window.scrollTo(0,document.body.scrollHeight);
     }
   };
   socket.on('stdout', outputHandler);
