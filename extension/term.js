@@ -28,6 +28,7 @@ window.addEventListener('DOMContentLoaded', function() {
   var input = term.find('textarea');
   var sizeInput = term.find('.text-copy');
 
+  // click to focus
   document.body.addEventListener('click', function() {
     input.focus();
   });
@@ -50,16 +51,12 @@ window.addEventListener('DOMContentLoaded', function() {
         var cmd = input.value.replace('/\n/g', '');
         socket.emit('input', cmd);
         setTimeout(function() {
-          input.value = '';
           autoSize();
         },4);
-        outputHandler(cmd);
+        input.value = '';
+        outputHandler(cmd.replace('/\r/g',''));
       }
     }, false);
-  keypress.combo("ctrl c", function() {
-    socket.emit('input');
-  });
-
   };
 
   socket.on('connect', handler);
