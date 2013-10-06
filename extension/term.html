@@ -5,13 +5,16 @@
     <link rel="stylesheet" href="normalize.css">
     <link rel="stylesheet" href="term.css">
     <script src="socket.io-client.js"></script>
+    <script src="keypress.js"></script>
     <script src="term.js"></script>
   </head>
   <body>
     <ul class="terminal">
       <li class="input">
-        <span class="prompt">Test</span>
-        <input type="text"></input>
+          <div class="input-container">
+            <textarea type="text"></textarea>
+            <div class="text-copy"></div>
+          </div>
       </li>
     </ul>
   </body>

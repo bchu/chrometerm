@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 var app = require('http').createServer(handler);
-var io = require('socket.io').listen(app);
+var io = require('socket.io').listen(app, { log: false });
 var fs = require('fs');
+var util = require('util');
+var cp = require('child_process');
 
 app.listen(4109);
 
@@ -9,9 +11,45 @@ function handler (req, res) {
   res.end(404);
 }
 
+// console.log(process);
+// console.log('&&&&&&&&&&&&&&&&&&&&&')
+// console.log(process.stdin);
+// console.log('&&&&&&&&&&&&&&&&&&&&&')
+// console.log(process.stdout);
+
+// must resume, paused by default
+// process.stdin.resume();
+// process.stdin.setEncoding('utf8');
+// process.stdin.on('data', function(data) {
+//   console.log(data);
+// });
+
+// process.stdout.on('data', function(data) {
+//   console.log(data);
+// });
+
 io.sockets.on('connection', function (socket) {
+  var puts = function(error, stdout, stderr) {
+    if (stdout) {
+      util.puts(stdout);
+      socket.emit('stdout', stdout);
+    }
+    if (stderr) {
+      util.puts(stderr);
+      socket.emit('stderr', stderr);
+    }
+  };
   socket.on('input', function (data) {
     console.log(data);
+    if (data.match(/cd /)) {
+      var dir = data.split(' ')[1];
+      console.log(dir);
+      console.log(__filename);
+      cp.fork(__filename, {cwd: __dirname + '/' + dir, execPath:process.execPath});
+      process.exit();
+    }
+    else {
+      cp.exec(data, puts);
+    }
   });
-  socket.emit('output', 'output');
 });
