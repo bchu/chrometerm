@@ -28,6 +28,10 @@ window.addEventListener('DOMContentLoaded', function() {
   var input = term.find('textarea');
   var sizeInput = term.find('.text-copy');
 
+  document.body.addEventListener('click', function() {
+    input.focus();
+  });
+
   var outputHandler = function(data) {
     if (data === '[H[2J') {
       output.innerHTML = '';

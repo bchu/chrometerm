@@ -4,5 +4,5 @@
   "description": "A terminal client for Chrome.",
   "version": "0.1",
   "options_page": "term.html",
-  "devtools_page": "term.html"
+  "devtools_page": "devtools.html"
 }
