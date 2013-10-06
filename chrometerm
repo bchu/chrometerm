@@ -11,12 +11,6 @@ function handler (req, res) {
   res.end(404);
 }
 
-// console.log(process);
-// console.log('&&&&&&&&&&&&&&&&&&&&&')
-// console.log(process.stdin);
-// console.log('&&&&&&&&&&&&&&&&&&&&&')
-// console.log(process.stdout);
-
 // must resume, paused by default
 // process.stdin.resume();
 // process.stdin.setEncoding('utf8');
@@ -31,22 +25,37 @@ function handler (req, res) {
 io.sockets.on('connection', function (socket) {
   var puts = function(error, stdout, stderr) {
     if (stdout) {
+      util.puts('out');
       util.puts(stdout);
       socket.emit('stdout', stdout);
     }
     if (stderr) {
+      util.puts('err');
       util.puts(stderr);
       socket.emit('stderr', stderr);
     }
   };
   socket.on('input', function (data) {
-    console.log(data);
+    // do this better, with regexes and whitespace insignificant
     if (data.match(/cd /)) {
       var dir = data.split(' ')[1];
-      console.log(dir);
-      console.log(__filename);
-      cp.fork(__filename, {cwd: __dirname + '/' + dir, execPath:process.execPath});
-      process.exit();
+      if (dir === '~') {
+        cp.exec('echo ' + dir, function(error, stdout, stderr) {
+          console.log(stdout);
+          try {
+            process.chdir(stdout);
+          }
+          catch(e){}
+        });
+      }
+      else {
+        console.log(dir);
+        console.log(__filename);
+        try {
+          process.chdir(dir);
+        }
+        catch(e){}
+      }
     }
     else {
       cp.exec(data, puts);

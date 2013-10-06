@@ -24,14 +24,17 @@ window.addEventListener('DOMContentLoaded', function() {
   var term = $('.terminal');
   term.find = $;
 
-  var prompt = term.find('.input');
+  var output = term.find('.output');
   var input = term.find('textarea');
   var sizeInput = term.find('.text-copy');
 
   var outputHandler = function(data) {
-    if (data) {
+    if (data === '[H[2J') {
+      output.innerHTML = '';
+    }
+    else if (data) {
       var li = line(data);
-      term.insertBefore(li, prompt);
+      output.appendChild(li);
     }
   };
   socket.on('stdout', outputHandler);
@@ -42,11 +45,17 @@ window.addEventListener('DOMContentLoaded', function() {
       if (e.keyCode === 13) {
         var cmd = input.value.replace('/\n/g', '');
         socket.emit('input', cmd);
-        input.value = '';
-        autoSize();
+        setTimeout(function() {
+          input.value = '';
+          autoSize();
+        },4);
         outputHandler(cmd);
       }
     }, false);
+  keypress.combo("ctrl c", function() {
+    socket.emit('input');
+  });
+
   };
 
   socket.on('connect', handler);
